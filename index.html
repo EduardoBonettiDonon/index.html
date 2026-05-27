@@ -1,169 +1,250 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Anexador de Jogos Online</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central de Jogos</title>
 
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+<style>
 
-    body{
-      background:#111827;
-      color:white;
-      min-height:100vh;
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    header{
-      background:#1f2937;
-      padding:20px;
-      text-align:center;
-      box-shadow:0 2px 10px rgba(0,0,0,0.5);
-    }
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+    padding: 30px;
+}
 
-    header h1{
-      color:#22c55e;
-      font-size:2rem;
-    }
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
 
-    .container{
-      width:90%;
-      max-width:1200px;
-      margin:30px auto;
-    }
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 40px;
+}
 
-    .form-box{
-      background:#1f2937;
-      padding:20px;
-      border-radius:12px;
-      margin-bottom:30px;
-    }
+.formulario {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
 
-    .form-box h2{
-      margin-bottom:15px;
-      color:#22c55e;
-    }
+input {
+    flex: 1;
+    min-width: 250px;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+}
 
-    input{
-      width:100%;
-      padding:12px;
-      margin:10px 0;
-      border:none;
-      border-radius:8px;
-      outline:none;
-      font-size:16px;
-    }
+button {
+    padding: 14px 22px;
+    border: none;
+    border-radius: 10px;
+    background: #22c55e;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+}
 
-    button{
-      background:#22c55e;
-      color:white;
-      border:none;
-      padding:12px 20px;
-      border-radius:8px;
-      cursor:pointer;
-      font-size:16px;
-      transition:0.3s;
-    }
+button:hover {
+    background: #16a34a;
+}
 
-    button:hover{
-      background:#16a34a;
-    }
+.lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
 
-    .games{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-      gap:20px;
-    }
+.card {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 16px;
+    transition: 0.2s;
+}
 
-    .game-card{
-      background:#1f2937;
-      border-radius:12px;
-      overflow:hidden;
-      padding:15px;
-      box-shadow:0 4px 10px rgba(0,0,0,0.4);
-    }
+.card:hover {
+    transform: scale(1.03);
+}
 
-    .game-card h3{
-      margin-bottom:10px;
-      color:#22c55e;
-    }
+.card h2 {
+    margin-bottom: 15px;
+}
 
-    iframe{
-      width:100%;
-      height:250px;
-      border:none;
-      border-radius:10px;
-      background:black;
-    }
+.card a {
+    display: inline-block;
+    text-decoration: none;
+    color: #60a5fa;
+    font-weight: bold;
+}
 
-    footer{
-      text-align:center;
-      padding:20px;
-      margin-top:30px;
-      color:#9ca3af;
-    }
-  </style>
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    opacity: 0.7;
+}
+
+</style>
 </head>
 <body>
 
-  <header>
-    <h1>🎮 Anexador de Jogos Online</h1>
-  </header>
+<div class="container">
 
-  <div class="container">
+    <h1>🎮 Central de Jogos</h1>
 
-    <div class="form-box">
-      <h2>Adicionar Novo Jogo</h2>
+    <div class="formulario">
 
-      <input type="text" id="gameName" placeholder="Nome do jogo">
+        <input type="text" id="nome" placeholder="Nome do jogo">
 
-      <input type="text" id="gameLink" placeholder="Link do jogo (embed ou iframe)">
+        <input type="text" id="link" placeholder="Link do jogo">
 
-      <button onclick="addGame()">Adicionar Jogo</button>
-    </div>
-
-    <div class="games" id="gamesContainer">
+        <button onclick="adicionarJogo()">
+            Adicionar
+        </button>
 
     </div>
 
-  </div>
+    <div class="lista" id="lista"></div>
 
-  <footer>
-    Site criado em HTML, CSS e JavaScript
-  </footer>
+    <div class="footer">
+        Site criado em HTML + CSS + JavaScript
+    </div>
 
-  <script>
-    function addGame() {
+</div>
 
-      const gameName = document.getElementById("gameName").value;
-      const gameLink = document.getElementById("gameLink").value;
+<script>
 
-      if(gameName === "" || gameLink === ""){
-        alert("Preencha todos os campos!");
-        return;
-      }
-
-      const container = document.getElementById("gamesContainer");
-
-      const card = document.createElement("div");
-      card.classList.add("game-card");
-
-      card.innerHTML = `
-        <h3>${gameName}</h3>
-        <iframe src="${gameLink}" allowfullscreen></iframe>
-      `;
-
-      container.appendChild(card);
-
-      document.getElementById("gameName").value = "";
-      document.getElementById("gameLink").value = "";
+const jogosPadrao = [
+    {
+        nome: "Minecraft",
+        link: "https://www.minecraft.net"
+    },
+    {
+        nome: "Roblox",
+        link: "https://www.roblox.com"
+    },
+    {
+        nome: "Fortnite",
+        link: "https://www.fortnite.com"
+    },
+    {
+        nome: "Free Fire",
+        link: "https://ff.garena.com"
+    },
+    {
+        nome: "Valorant",
+        link: "https://playvalorant.com"
+    },
+    {
+        nome: "League of Legends",
+        link: "https://www.leagueoflegends.com"
+    },
+    {
+        nome: "Counter Strike 2",
+        link: "https://store.steampowered.com/app/730/CounterStrike_2/"
+    },
+    {
+        nome: "GTA V",
+        link: "https://www.rockstargames.com/gta-v"
+    },
+    {
+        nome: "Rocket League",
+        link: "https://www.rocketleague.com"
+    },
+    {
+        nome: "Among Us",
+        link: "https://www.innersloth.com/games/among-us/"
     }
-  </script>
+];
+
+if (!localStorage.getItem("jogos")) {
+    localStorage.setItem("jogos", JSON.stringify(jogosPadrao));
+}
+
+function pegarJogos() {
+    return JSON.parse(localStorage.getItem("jogos")) || [];
+}
+
+function salvarJogos(jogos) {
+    localStorage.setItem("jogos", JSON.stringify(jogos));
+}
+
+function renderizarJogos() {
+
+    const lista = document.getElementById("lista");
+
+    const jogos = pegarJogos();
+
+    lista.innerHTML = "";
+
+    jogos.forEach((jogo, index) => {
+
+        lista.innerHTML += `
+        <div class="card">
+            <h2>${jogo.nome}</h2>
+
+            <a href="${jogo.link}" target="_blank">
+                Abrir jogo
+            </a>
+
+            <br><br>
+
+            <button onclick="removerJogo(${index})">
+                Remover
+            </button>
+        </div>
+        `;
+    });
+}
+
+function adicionarJogo() {
+
+    const nome = document.getElementById("nome").value;
+    const link = document.getElementById("link").value;
+
+    if (!nome || !link) {
+        alert("Preencha tudo");
+        return;
+    }
+
+    const jogos = pegarJogos();
+
+    jogos.push({ nome, link });
+
+    salvarJogos(jogos);
+
+    document.getElementById("nome").value = "";
+    document.getElementById("link").value = "";
+
+    renderizarJogos();
+}
+
+function removerJogo(index) {
+
+    const jogos = pegarJogos();
+
+    jogos.splice(index, 1);
+
+    salvarJogos(jogos);
+
+    renderizarJogos();
+}
+
+renderizarJogos();
+
+</script>
 
 </body>
 </html>
